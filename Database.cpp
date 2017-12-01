@@ -1,11 +1,6 @@
 #include "Database.h"
 
-Database* Database::_self = NULL;
-
-Database::Database(QObject *parent) : QObject(parent)
-{
-
-}
+Database* Database::self = NULL;
 
 void Database::connect()
 {
@@ -16,18 +11,15 @@ void Database::connect()
     db.setPassword(Settings::mysql_pass);
     db.setDatabaseName(Settings::mysql_db);
     db.setConnectOptions("MYSQL_OPT_RECONNECT=1;MYSQL_OPT_CONNECT_TIMEOUT=300");
-    if (!db.open())
-    {
+    if (!db.open()) {
         Utils::print(QString("Cant connect to mysql: %1").arg(db.lastError().text()));
         exit(0);
-    }
-    else
-    {
+    } else {
         Utils::print("Successfully connected to database");
     }
 }
 
-void Database::clearOnlineRecords(int zoneid, int aid)
+void Database::clearOnlineRecords(const int &zoneid, const int &aid)
 {
     QSqlQuery sql(db);
     sql.prepare("CALL clearonlinerecords(?, ?)");
@@ -37,19 +29,34 @@ void Database::clearOnlineRecords(int zoneid, int aid)
 }
 
 
-void Database::acquireUserPasswd(QString login, int &uid, QString &passwd)
+void Database::acquireUserPasswd(const QString &login, int &uid, QString &passwd)
 {
     QSqlQuery sql(db);
     sql.prepare("CALL acquireuserpasswd(?, @out1, @out2)");
     sql.addBindValue(login);
     sql.exec();
     sql.exec("SELECT @out1, @out2");
-    sql.next();
-    uid = sql.value(0).toInt();
-    passwd = sql.value(1).toString();
+    if(sql.next()) {
+        uid = sql.value(0).toInt();
+        passwd = sql.value(1).toString();
+    }
 }
 
-void Database::recordOnline(int uid, int aid, int &zoneid, int &zonelocalid, int &overwrite)
+void Database::acquireUserPasswdbyEmail(const QString &email, int &uid, QString &passwd)
+{
+    QSqlQuery sql(db);
+    sql.prepare("SELECT ID, passwd FROM users WHERE email=?");
+    sql.addBindValue(email);
+    sql.exec();
+    if (sql.next()) {
+        uid = sql.value(0).toInt();
+        passwd = sql.value(1).toString();
+        Utils::print(QString::number(uid));
+        Utils::print(passwd);
+    }
+}
+
+void Database::recordOnline(const int &uid, const int &aid, int &zoneid, int &zonelocalid, int &overwrite)
 {
     QSqlQuery sql(db);
     sql.prepare("CALL recordonline(?, ?, ?, ?, ?)");
@@ -64,7 +71,7 @@ void Database::recordOnline(int uid, int aid, int &zoneid, int &zonelocalid, int
     overwrite = sql.boundValue(4).toInt();
 }
 
-void Database::recordOffline(int uid, int aid, int &zoneid, int &zonelocalid, int &overwrite)
+void Database::recordOffline(const int &uid, const int &aid, int &zoneid, int &zonelocalid, int &overwrite)
 {
     QSqlQuery sql(db);
     sql.prepare("CALL recordoffline(?, ?, ?, ?, ?)");
@@ -79,19 +86,18 @@ void Database::recordOffline(int uid, int aid, int &zoneid, int &zonelocalid, in
     overwrite = sql.boundValue(4).toInt();
 }
 
-void Database::acquireUserCreatime(int uid, int &timestamp)
+void Database::acquireUserCreatime(const int &uid, int &timestamp)
 {
     QSqlQuery sql(db);
     sql.prepare("SELECT creatime FROM users WHERE ID=?");
     sql.addBindValue(uid);
     sql.exec();
-    if (sql.next())
-    {
+    if (sql.next()) {
         timestamp = sql.value(0).toDateTime().toTime_t();
     }
 }
 
-QList<int> Database::acquireUserPrivilege(int userid, int zoneid)
+QList<int> Database::acquireUserPrivilege(const int &userid, const int &zoneid)
 {
     QList<int> priv;
     QSqlQuery sql(db);
@@ -104,7 +110,7 @@ QList<int> Database::acquireUserPrivilege(int userid, int zoneid)
     return priv;
 }
 
-QList<QVariantList> Database::getUseCashNow(int status)
+QList<QVariantList> Database::getUseCashNow(const int &status)
 {
     QList<QVariantList> cashnow;
     QSqlQuery sql(db);
@@ -112,8 +118,7 @@ QList<QVariantList> Database::getUseCashNow(int status)
     sql.addBindValue(status);
     sql.exec();
     QSqlQuery di(db);
-    while (sql.next())
-    {
+    while (sql.next()) {
         cashnow.append(QVariantList() << sql.value(0) << sql.value(1));
         di.exec(QString("UPDATE usecashnow SET status=1 WHERE userid=%1 AND sn=%2")
                 .arg(sql.value(0).toString()).arg(sql.value(2).toString()));
@@ -121,7 +126,7 @@ QList<QVariantList> Database::getUseCashNow(int status)
     return cashnow;
 }
 
-QVariantList Database::getUseCashNow(int userid, int zoneid)
+QVariantList Database::getUseCashNow(const int &userid, const int &zoneid)
 {
     QVariantList cashnow;
     QSqlQuery sql(db);
@@ -139,7 +144,7 @@ QVariantList Database::getUseCashNow(int userid, int zoneid)
     return cashnow;
 }
 
-void Database::addCashLog(int userid, int zoneid, int sn, int aid, int point, int cash, int status, QDateTime creatime)
+void Database::addCashLog(const int &userid, const int &zoneid, const int &sn, const int &aid, const int &point, const int &cash, const int &status, const QDateTime &creatime)
 {
     QSqlQuery sql(db);
     sql.prepare("INSERT INTO usecashlog VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
@@ -154,7 +159,7 @@ void Database::addCashLog(int userid, int zoneid, int sn, int aid, int point, in
     sql.exec();
 }
 
-int Database::useCash(int userid, int zoneid, int sn, int aid, int point, int cash, int status)
+int Database::useCash(const int &userid, const int &zoneid, const int &sn, const int &aid, const int &point, const int &cash, const int &status)
 {
     QSqlQuery sql(db);
     sql.prepare("CALL usecash(?, ?, ?, ?, ?, ?, ?, @out1)");

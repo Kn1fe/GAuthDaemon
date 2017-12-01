@@ -15,25 +15,27 @@ class Database : public QObject
 {
     Q_OBJECT
 public:
-    explicit Database(QObject *parent = nullptr);
+    explicit Database(QObject *parent = nullptr)  : QObject(parent) {}
     ~Database() { db.close(); }
     void connect();
-    void clearOnlineRecords(int zoneid, int aid);
-    void acquireUserPasswd(QString login, int &uid, QString &passwd);
-    void recordOnline(int uid, int aid, int &zoneid, int &zonelocalid, int &overwrite);
-    void recordOffline(int uid, int aid, int &zoneid, int &zonelocalid, int &overwrite);
-    void acquireUserCreatime(int uid, int &timestamp);
-    QList<int> acquireUserPrivilege(int userid, int zoneid);
-    QList<QVariantList> getUseCashNow(int status);
-    QVariantList getUseCashNow(int userid, int zoneid);
-    void addCashLog(int userid, int zoneid, int sn, int aid, int point, int cash, int status, QDateTime creatime);
-    int useCash(int userid, int zoneid, int sn, int aid, int point, int cash, int status);
+    void clearOnlineRecords(const int &zoneid, const int &aid);
+    void acquireUserPasswd(const QString &login, int &uid, QString &passwd);
+    void acquireUserPasswdbyEmail(const QString &email, int &uid, QString &passwd);
+    void recordOnline(const int &uid, const int &aid, int &zoneid, int &zonelocalid, int &overwrite);
+    void recordOffline(const int &uid, const int &aid, int &zoneid, int &zonelocalid, int &overwrite);
+    void acquireUserCreatime(const int &uid, int &timestamp);
+    QList<int> acquireUserPrivilege(const int &userid, const int &zoneid);
+    QList<QVariantList> getUseCashNow(const int &status);
+    QVariantList getUseCashNow(const int &userid, const int &zoneid);
+    void addCashLog(const int &userid, const int &zoneid, const int &sn, const int &aid, const int &point, const int &cash, const int &status, const QDateTime &creatime);
+    int useCash(const int &userid, const int &zoneid, const int &sn, const int &aid, const int &point, const int &cash, const int &status);
     static Database *Instance()
     {
-        if (!_self) _self = new Database();
-        return _self;
+        if (!self)
+            self = new Database();
+        return self;
     }
-    static Database *_self;
+    static Database *self;
 
 private:
     QSqlDatabase db;

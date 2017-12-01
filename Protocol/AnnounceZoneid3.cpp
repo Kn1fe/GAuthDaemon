@@ -10,8 +10,8 @@ void AnnounceZoneid3::Unmarshal()
     this->operator >>(ip3);
     this->operator >>(get_au_version);
     this->operator >>(reserved);
-    Utils::print(QString("AnnounceZoneid zoneid: %1; aid: %2; blreset: %3; "
-                 "ip1: %4; ip2: %5; ip3: %6; get_au_version: %7; reserved: %8")
+    Utils::print(QString("AnnounceZoneid zoneid: %1, aid: %2, blreset: %3, "
+                 "ip1: %4, ip2: %5, ip3: %6, get_au_version: %7, reserved: %8")
                  .arg(zoneid)
                  .arg(aid)
                  .arg(blreset == 0 ? "false" : "true")

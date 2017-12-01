@@ -4,6 +4,10 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QHostAddress>
+#include <QHash>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QTimer>
 
 #include <Settings.h>
 #include <AuthClient.h>
@@ -13,19 +17,30 @@ class AuthServer : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit AuthServer(QObject *parent = nullptr);
+    explicit AuthServer(QObject *parent = nullptr) : QTcpServer(parent) {}
     void Start();
+    bool bruteForceManager(QString ip);
     static AuthServer *Instance()
     {
-        if (!_self) _self = new AuthServer();
-        return _self;
+        if (!self)
+            self = new AuthServer();
+        return self;
     }
-    static AuthServer *_self;
+    static AuthServer *self;
     int Zoneid = 0;
     int Aid = 0;
 
+public slots:
+    void bruteCleaner();
+
 protected:
     void incomingConnection(qintptr handle);
+
+private:
+    QHash<QString, int> challenges;
+    QHash<QString, int> blocked;
+    QMutex mutex;
+    QTimer *bruteTimer;
 };
 
 #endif // AUTHSERVER_H

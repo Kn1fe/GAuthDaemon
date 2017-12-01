@@ -9,7 +9,6 @@
 #include <QTimer>
 
 #include <Settings.h>
-#include <Network/RC4EncDec.h>
 #include <Network/OctetsStream.h>
 #include <Utils.h>
 #include <Database.h>
@@ -33,7 +32,6 @@ protected:
 private:
     qintptr socketDescriptor;
     QTcpSocket *socket;
-    RC4EncDec rc4;
     QTimer *goldTimer;
 };
 

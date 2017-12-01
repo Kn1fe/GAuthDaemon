@@ -1,23 +1,24 @@
-#ifndef MATRIXPASSWD_H
-#define MATRIXPASSWD_H
+#ifndef MATRIXTOKEN_H
+#define MATRIXTOKEN_H
 
 #include <QObject>
-#include <QRegularExpression>
 
 #include <Utils.h>
 #include <Network/OctetsStream.h>
 #include <Network/Octets.h>
 #include <Database.h>
+#include <AuthServer.h>
 
-class MatrixPasswd : public OctetsStream
+class MatrixToken : public OctetsStream
 {
 public:
-    MatrixPasswd() : OctetsStream() {}
+    MatrixToken() : OctetsStream() {}
     virtual void Unmarshal() override;
 
     Octets account;
-    Octets challenge;
+    Octets token;
     int loginip;
+    Octets challenge;
 };
 
-#endif // MATRIXPASSWD_H
+#endif // MATRIXTOKEN_H

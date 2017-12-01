@@ -8,15 +8,16 @@
 #include <AuthServer.h>
 #include <Utils.h>
 
-#include <Handle/AnnounceZoneid.h>
-#include <Handle/AnnounceZoneid2.h>
-#include <Handle/AnnounceZoneid3.h>
-#include <Handle/MatrixPasswd.h>
-#include <Handle/UserLogin.h>
-#include <Handle/UserLogout.h>
-#include <Handle/QueryUserPrivilege.h>
-#include <Handle/MatrixToken.h>
-#include <Handle/GetAddCashSN.h>
+#include <Protocol/AnnounceZoneid.h>
+#include <Protocol/AnnounceZoneid2.h>
+#include <Protocol/AnnounceZoneid3.h>
+#include <Protocol/MatrixPasswd.h>
+#include <Protocol/UserLogin.h>
+#include <Protocol/UserLogout.h>
+#include <Protocol/QueryUserPrivilege.h>
+#include <Protocol/MatrixToken.h>
+#include <Protocol/GetAddCashSN.h>
+#include <Protocol/Game2AU.h>
 
 int main(int argc, char *argv[])
 {
@@ -32,9 +33,10 @@ int main(int argc, char *argv[])
     qRegisterMetaType<MatrixToken>("8070");
     qRegisterMetaType<GetAddCashSN>("514");
     qRegisterMetaType<OctetsStream>("516");//AddCash_Re
-    qRegisterMetaType<OctetsStream>("8039");//GAME2AU
+    qRegisterMetaType<Game2AU>("8039");
 
-    Utils::print("GAuthDaemon by Kn1fe-Zone.Ru Team v1.0 alpha");
+    Utils::print("GAuthDaemon by Kn1fe-Zone.Ru Team v1.1.0 alpha");
+    Utils::print(QString("Build date: %1 at %2").arg(__DATE__).arg(__TIME__));
     Utils::print("Loading gauthd.conf");
     Settings::Init(a.applicationDirPath() + "/gauthd.conf");
     Database::Instance()->connect();

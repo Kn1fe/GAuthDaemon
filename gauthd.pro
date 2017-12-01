@@ -15,16 +15,17 @@ SOURCES += main.cpp \
     AuthClient.cpp \
     Utils.cpp \
     Network/OctetsStream.cpp \
-    Handle/AnnounceZoneid.cpp \
-    Handle/MatrixPasswd.cpp \
+    Protocol/AnnounceZoneid.cpp \
+    Protocol/MatrixPasswd.cpp \
     Database.cpp \
-    Handle/UserLogin.cpp \
-    Handle/AnnounceZoneid2.cpp \
-    Handle/AnnounceZoneid3.cpp \
-    Handle/UserLogout.cpp \
-    Handle/QueryUserPrivilege.cpp \
-    Handle/MatrixToken.cpp \
-    Handle/GetAddCashSN.cpp
+    Protocol/UserLogin.cpp \
+    Protocol/AnnounceZoneid2.cpp \
+    Protocol/AnnounceZoneid3.cpp \
+    Protocol/UserLogout.cpp \
+    Protocol/QueryUserPrivilege.cpp \
+    Protocol/MatrixToken.cpp \
+    Protocol/GetAddCashSN.cpp \
+    Protocol/Game2AU.cpp
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -34,21 +35,20 @@ HEADERS += \
     AuthServer.h \
     Settings.h \
     AuthClient.h \
-    Network/RC4.h \
-    Network/RC4EncDec.h \
     Utils.h \
     Network/OctetsStream.h \
-    Handle/AnnounceZoneid.h \
-    Handle/MatrixPasswd.h \
+    Protocol/AnnounceZoneid.h \
+    Protocol/MatrixPasswd.h \
     Database.h \
     Network/Octets.h \
-    Handle/UserLogin.h \
-    Handle/AnnounceZoneid2.h \
-    Handle/AnnounceZoneid3.h \
-    Handle/UserLogout.h \
-    Handle/QueryUserPrivilege.h \
-    Handle/MatrixToken.h \
-    Handle/GetAddCashSN.h
+    Protocol/UserLogin.h \
+    Protocol/AnnounceZoneid2.h \
+    Protocol/AnnounceZoneid3.h \
+    Protocol/UserLogout.h \
+    Protocol/QueryUserPrivilege.h \
+    Protocol/MatrixToken.h \
+    Protocol/GetAddCashSN.h \
+    Protocol/Game2AU.h
 
 unix:!macx: LIBS += -L$$PWD/../../../../opt/Qt/mysql/x64/lib/ -lmysqlclient
 

@@ -7,23 +7,23 @@ void MatrixToken::Unmarshal()
     this->operator >>(token);
     this->operator >>(loginip);
     this->operator >>(challenge);
-    Utils::print(QString("MatrixToken account: %1; from ip: %2")
+    if (AuthServer::Instance()->bruteForceManager(Utils::getIp(loginip)))
+        return;
+    Utils::print(QString("MatrixToken account: %1, from ip: %2")
                  .arg(Utils::toUtf8(account)).arg(Utils::getIp(loginip)));
     Database *db = Database::Instance();
-    int uid;
+    int uid = 0;
     QString passwd;
-    db->acquireUserPasswd(Utils::toUtf8(account), uid, passwd);
+    if (Settings::byToken)
+        db->acquireUserPasswd(Utils::toUtf8(account), uid, passwd);
     Reset();
     writeUInt32(calcSession());
-    if (uid > 0 && Utils::toUtf8(token) == passwd)
-    {
+    if (uid > 0 && Utils::toUtf8(token) == passwd) {
         writeInt32(0);
         writeInt32(uid);
         writeInt32(0);
         writeOctet(Utils::base64Octets(passwd));
-    }
-    else
-    {
+    } else {
         writeInt32(28);
         writeInt32(0);
         writeInt32(0);

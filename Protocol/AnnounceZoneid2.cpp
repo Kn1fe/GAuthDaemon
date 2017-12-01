@@ -5,7 +5,7 @@ void AnnounceZoneid2::Unmarshal()
     this->operator >>(zoneid);
     this->operator >>(aid);
     this->operator >>(blreset);
-    Utils::print(QString("AnnounceZoneid zoneid: %1; aid: %2; blreset: %3")
+    Utils::print(QString("AnnounceZoneid zoneid: %1, aid: %2, blreset: %3")
                  .arg(zoneid)
                  .arg(aid)
                  .arg(blreset == 0 ? "false" : "true"));
