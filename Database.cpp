@@ -51,8 +51,6 @@ void Database::acquireUserPasswdbyEmail(const QString &email, int &uid, QString 
     if (sql.next()) {
         uid = sql.value(0).toInt();
         passwd = sql.value(1).toString();
-        Utils::print(QString::number(uid));
-        Utils::print(passwd);
     }
 }
 
