@@ -27,8 +27,6 @@ void AuthClient::readyRead()
         OctetsStream stream(data, false);
         uint OpCode = stream.uncompact_uint32();
         uint Lenght = stream.uncompact_uint32();
-        if (Lenght != data.length())
-            return;
         int id = QMetaType::type(QString::number(OpCode).toStdString().c_str());
         if (id != QMetaType::UnknownType) {
             void *ptr = QMetaType::create(id);
