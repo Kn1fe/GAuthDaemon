@@ -37,8 +37,8 @@ protected:
     void incomingConnection(qintptr handle);
 
 private:
-    QHash<QString, int> challenges;
-    QHash<QString, int> blocked;
+    QHash<QString, uint> challenges;
+    QHash<QString, uint> blocked;
     QMutex mutex;
     QTimer *bruteTimer;
 };

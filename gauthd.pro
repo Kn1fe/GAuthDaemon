@@ -1,8 +1,6 @@
 QT += core sql network
 QT -= gui
 
-CONFIG += c++11
-
 TARGET = gauthd
 CONFIG += console
 CONFIG -= app_bundle
@@ -50,9 +48,5 @@ HEADERS += \
     Protocol/GetAddCashSN.h \
     Protocol/Game2AU.h
 
-unix:!macx: LIBS += -L$$PWD/../../../../opt/Qt/mysql/x32/lib/ -lmysqlclient
-
+LIBS += -L$$PWD/../../../../opt/Qt/mysql/x32/lib/libmysqlclient.a
 INCLUDEPATH += $$PWD/../../../../opt/Qt/mysql/x32/include
-DEPENDPATH += $$PWD/../../../../opt/Qt/mysql/x32/include
-
-unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../opt/Qt/mysql/x32/lib/libmysqlclient.a

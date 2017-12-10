@@ -9,7 +9,7 @@ void MatrixToken::Unmarshal()
     this->operator >>(challenge);
     if (AuthServer::Instance()->bruteForceManager(Utils::getIp(loginip)))
         return;
-    Utils::print(QString("MatrixToken account: %1, from ip: %2")
+    Utils::print(QString("MatrixToken account: %1, ip: %2")
                  .arg(Utils::toUtf8(account)).arg(Utils::getIp(loginip)));
     Database *db = Database::Instance();
     int uid = 0;
