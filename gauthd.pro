@@ -2,7 +2,7 @@ QT += core sql network
 QT -= gui
 
 TARGET = gauthd
-CONFIG += console
+CONFIG += console 64bit
 CONFIG -= app_bundle
 
 TEMPLATE = app
@@ -22,12 +22,8 @@ SOURCES += main.cpp \
     Protocol/UserLogout.cpp \
     Protocol/QueryUserPrivilege.cpp \
     Protocol/MatrixToken.cpp \
-    Protocol/GetAddCashSN.cpp \
-    Protocol/Game2AU.cpp
-
-DEFINES += QT_DEPRECATED_WARNINGS
-
-QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -static
+    Protocol/Game2AU.cpp \
+    Protocol/GetAddCashSN.cpp
 
 HEADERS += \
     AuthServer.h \
@@ -45,8 +41,14 @@ HEADERS += \
     Protocol/UserLogout.h \
     Protocol/QueryUserPrivilege.h \
     Protocol/MatrixToken.h \
-    Protocol/GetAddCashSN.h \
-    Protocol/Game2AU.h
+    Protocol/Game2AU.h \
+    Protocol/GetAddCashSN.h
 
-LIBS += -L$$PWD/../../../../opt/Qt/mysql/x32/lib/libmysqlclient.a
-INCLUDEPATH += $$PWD/../../../../opt/Qt/mysql/x32/include
+QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -static
+
+CONFIG(32bit) {
+    LIBS += -L$$PWD/../../../../opt/Qt/mysql/x32/lib/libmysqlclient.a
+}
+CONFIG(64bit) {
+    LIBS += -L$$PWD/../../../../opt/Qt/mysql/x64/lib/libmysqlclient.a
+}

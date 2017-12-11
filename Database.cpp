@@ -108,18 +108,20 @@ QList<int> Database::acquireUserPrivilege(const int &userid, const int &zoneid)
     return priv;
 }
 
-QList<QVariantList> Database::getUseCashNow(const int &status)
+QVariantList Database::getUseCashNow(const int &status)
 {
-    QList<QVariantList> cashnow;
+    QVariantList cashnow;
     QSqlQuery sql(db);
     sql.prepare("SELECT * FROM usecashnow WHERE status=?");
     sql.addBindValue(status);
     sql.exec();
-    QSqlQuery di(db);
-    while (sql.next()) {
-        cashnow.append(QVariantList() << sql.value(0) << sql.value(1));
-        di.exec(QString("UPDATE usecashnow SET status=1 WHERE userid=%1 AND sn=%2")
-                .arg(sql.value(0).toString()).arg(sql.value(2).toString()));
+    if (sql.next()) {
+        cashnow << sql.value(0) << sql.value(1);
+        QSqlQuery di(db);
+        di.prepare("UPDATE usecashnow SET status=1 WHERE userid=? AND creatime=?");
+        di.addBindValue(sql.value(0));
+        di.addBindValue(sql.value(7));
+        di.exec();
     }
     return cashnow;
 }

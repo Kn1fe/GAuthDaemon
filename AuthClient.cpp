@@ -57,17 +57,16 @@ void AuthClient::goldChecker()
     try
     {
         Database *db = Database::Instance();
-        QList<QVariantList> cashnow = db->getUseCashNow(0);
-        for (int i = 0; i < cashnow.length(); ++i) {
-            QVariantList now = cashnow[i];
-            OctetsStream *stream = new OctetsStream();
-            stream->socket = socket;
-            stream->writeInt32(-1);
-            stream->writeInt32(now[0].toInt());
-            stream->writeInt32(now[1].toInt());
-            stream->Send(514);
-            Utils::print(QString("GetAddCashSN userid: %1, zoneid: %2").arg(now[0].toInt()).arg(now[1].toInt()));
-        }
+        QVariantList now = db->getUseCashNow(0);
+        if (now.length() == 0)
+            return;
+        OctetsStream *stream = new OctetsStream();
+        stream->socket = socket;
+        stream->writeInt32(-1);
+        stream->writeInt32(now[0].toInt());
+        stream->writeInt32(now[1].toInt());
+        stream->Send(514);
+        Utils::print(QString("GetAddCashSN userid: %1, zoneid: %2").arg(now[0].toInt()).arg(now[1].toInt()));
     }
     catch (...)
     {

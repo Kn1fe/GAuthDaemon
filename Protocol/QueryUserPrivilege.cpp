@@ -6,8 +6,8 @@ void QueryUserPrivilege::Unmarshal()
     this->operator >>(zoneid);
     Database *db = Database::Instance();
     QList<int> priv = db->acquireUserPrivilege(userid, zoneid);
-    Utils::print(QString("QueryUserPrivilege userid: %1, zoneid: %2, privilege count: %3")
-                 .arg(userid).arg(zoneid).arg(priv.length()));
+    Utils::print(QString("QueryUserPrivilege userid: %1, privilege count: %2")
+                 .arg(userid).arg(priv.length()));
     Reset();
     writeInt32(userid);
     compact_uint32(priv.count());

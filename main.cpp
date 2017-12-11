@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<OctetsStream>("516");//AddCash_Re
     qRegisterMetaType<Game2AU>("8039");
 
-    Utils::print("GAuthDaemon by Kn1fe-Zone.Ru Team v1.1.2 alpha");
+    Utils::print("GAuthDaemon by Kn1fe-Zone.Ru Team v1.2.0 alpha");
     Utils::print(QString("Build date: %1 at %2").arg(__DATE__).arg(__TIME__));
     Utils::print("Loading gauthd.conf");
     Settings::Init(a.applicationDirPath() + "/gauthd.conf");
